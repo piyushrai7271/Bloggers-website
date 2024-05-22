@@ -2,7 +2,6 @@ import conf from "../conf/conf";
 import { Account, Client, ID } from "appwrite";
 
 export class AuthService {
-    
   client = new Client();
   account;
 
@@ -14,6 +13,7 @@ export class AuthService {
   }
 
   async createAccount({ email, password, name }) {
+    
     try {
       const useAccount = await this.account.create(
         ID.unique(),
@@ -23,42 +23,39 @@ export class AuthService {
       );
       if (useAccount) {
         //call another method
-        return this.login({email,password});
+        return this.login({ email, password });
       } else {
         return useAccount;
       }
+    } catch (error) {
+      console.log("Appwrite service :: createAccount :: error",error)
+    }
+  }
+
+  async login({ email, password }) {
+    try {
+      return await this.account.createEmailSession(email, password);
     } catch (error) {
       throw error;
     }
   }
 
- async login({email,password}) {
+  async getCurrentUser() {
     try {
-        return await this.account.createEmailSession(email,password);
+      return await this.account.get();
     } catch (error) {
-        throw error;
-    }
- }
-
- async getCurrentUser(){
-    try {
-       return  await this.account.get();
-    } catch (error) {
-        throw error;
+      console.log("Appwrite service :: getCurrentUser :: error", error);
     }
     return null;
- }
+  }
 
-
- async logOut(){
+  async logOut() {
     try {
-       await this.account.deleteSessions();
+      return await this.account.deleteSessions();
     } catch (error) {
-        throw error;
+      console.log("Appwrite service :: logOut :: error", error);
     }
- } 
-
-
+  }
 }
 const authService = new AuthService();
 

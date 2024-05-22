@@ -32,7 +32,7 @@ export class Service{
         }
     }
 
-    async updatePost(slug,{title,content,featuredImage,status,userId}){
+    async updatePost(slug,{title,content,featuredImage,status }){ 
         try {
             return await this.databases.updateDocument(
                 conf.appwriteDatabaseId,
@@ -46,7 +46,7 @@ export class Service{
                 }
             )
         } catch (error) {
-            console.log("Appwrite service :: createPost :: error",error);
+            console.log("Appwrite service :: updatePost :: error",error);
         }
     }
 
@@ -59,7 +59,7 @@ export class Service{
             )
             return true;
         } catch (error) {
-            console.log("Appwrite servive :: updatePost :: error",error);
+            console.log("Appwrite servive :: deletePost :: error",error);
             return false;
         }
     }
@@ -85,7 +85,7 @@ export class Service{
                 queries,
             )
         } catch (error) {
-            console.log("Appwrite serive :: getPost :: error",error);
+            console.log("Appwrite serive :: getPosts :: error",error);
             return false;
         }
     }
@@ -105,7 +105,7 @@ export class Service{
         }
     }
 
-    async deleteFile(fileId){
+    async deleteFile(fileId){ // featured image is considered as fileID
         try {
             await this.bucket.deleteFile(
                 conf.appwriteBucketId,
